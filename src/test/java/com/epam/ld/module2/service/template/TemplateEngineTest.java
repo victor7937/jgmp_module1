@@ -8,8 +8,6 @@ import com.epam.ld.module2.service.template.exception.TagsRemainTemplateExceptio
 import org.junit.jupiter.api.Assertions;
 
 import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -122,14 +120,14 @@ public class TemplateEngineTest {
     @Nested
     class ValidationTests{
         @ParameterizedTest
-        @ValueSource(strings = {"气候宜人", "18381","привет"})
+        @ValueSource(strings = {"气候宜人", "Alpha - Α α Beta - Β β Gamma - Γ γ Delta - Δ δ Epsilon - Ε ε Zeta - Ζ ζ","привет"})
         void exceptionShouldBeRaisedForNonLatin1Data(String text){
             //Having
             Template template = new Template(text);
             Client client = new Client(SAMPLE_MAIL, new HashMap<>());
             TemplateEngine templateEngine = new TemplateEngine();
             //Then
-            assertThrows(NonLatinTemplateException.class, () -> templateEngine.generateMessage(template, client),"Templ Latin-1");
+            assertThrows(NonLatinTemplateException.class, () -> templateEngine.generateMessage(template, client));
         }
 
         @ParameterizedTest
