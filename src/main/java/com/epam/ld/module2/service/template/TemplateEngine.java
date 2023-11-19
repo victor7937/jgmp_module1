@@ -6,6 +6,12 @@ import com.epam.ld.module2.model.Template;
 import com.epam.ld.module2.service.template.exception.NonLatinTemplateException;
 import com.epam.ld.module2.service.template.exception.TagsRemainTemplateException;
 
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.epam.ld.module2.service.template.Constant.TAG_REGEX;
+
 
 /**
  * The type Template engine.
@@ -33,8 +39,23 @@ public class TemplateEngine {
     }
 
     private String insertValues(TaggedTemplate taggedTemplate){
+        Map<String, String> tags = taggedTemplate.getTags();
+        String text = taggedTemplate.getText();
 
-        return "";
+        StringBuffer sb = new StringBuffer();
+        Pattern pattern = Pattern.compile(TAG_REGEX);
+        Matcher matcher = pattern.matcher(text);
+
+        while (matcher.find()) {
+            String whatWasFound = matcher.group(1);
+            String tagValue = tags.get(whatWasFound);
+            if (tagValue != null) {
+                matcher.appendReplacement(sb, tagValue);
+            }
+        }
+        matcher.appendTail(sb);
+
+        return sb.toString();
     }
 
 
