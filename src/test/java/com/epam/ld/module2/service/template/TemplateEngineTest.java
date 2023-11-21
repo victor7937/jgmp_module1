@@ -6,13 +6,12 @@ import com.epam.ld.module2.model.Template;
 import com.epam.ld.module2.service.template.exception.NonLatinTemplateException;
 import com.epam.ld.module2.service.template.exception.TagsRemainTemplateException;
 import org.junit.jupiter.api.Assertions;
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,14 +23,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class TemplateEngineTest {
 
-    public static final String SAMPLE_MAIL = "aa@mail.ru";
+    private final Client client = Client.builder()
+            .email("email@mail.com")
+            .password("password")
+            .targetEmail("email@mail.com")
+            .subject("test subject")
+            .tags( new HashMap<>())
+            .build();
 
     @Nested
-    class ExecutionTests{
+    class ExecutionTests {
         private static Stream<Arguments> provideInputForTemplateEngine() {
             return Stream.of(
                     Arguments.of(
-                            Map.of("subject","Business Letter"),
+                            Map.of("subject", "Business Letter"),
                             "Subject: #{subject} then letter goes next....",
                             "Subject: Business Letter then letter goes next...."),
                     Arguments.of(
@@ -43,99 +48,98 @@ public class TemplateEngineTest {
                     Arguments.of(
                             Map.of(
                                     "name", "Dana Coots",
-                                    "job_title","Marketing Manager",
-                                    "company","QuipJobs",
-                                    "date","March 9, 2023"),
+                                    "job_title", "Marketing Manager",
+                                    "company", "QuipJobs",
+                                    "date", "March 9, 2023"),
                             """
-                            #{name}
-                            #{job_title}
-                            #{company}
-                            45 Cimarron Way
-                            San Diego, CA 92029
-                                                     
-                            #{date}
-                                                     
-                            Pat Gray
-                            HR Recruiter
-                            Trusted Media
-                            9 Roundtable Circle
-                            Los Angeles, CA 90016
-                                                     
-                            Greetings Mrs. Gray:
-                                                     
-                            I'm pleased to recommend Jason Breeze for the Social Media Coordinator position at Trusted Media. I was Jason's supervisor at QuipJobs for five years, where he used his digital marketing and communication skills to deliver strong results in his role as Social Media Support Specialist. His creativity, writing and organizational skills would make him an asset at Trusted Media.
-                                                     
-                            As a Social Media Support Specialist, Jason demonstrated his ability to connect with an audience and analyze data. Over two years, he grew our social media presence on all platforms by 233%. During our new product launch, he used his exceptional creative skills to design an effective social media campaign.
-                                                     
-                            I highly recommend Jason for this role and believe he can be a strong addition to your team. Please contact me if you have any questions about his past work.
-                                                     
-                            Sincerely,
-                                                     
-                            #{name}
-                            """,
+                                    #{name}
+                                    #{job_title}
+                                    #{company}
+                                    45 Cimarron Way
+                                    San Diego, CA 92029
+                                                             
+                                    #{date}
+                                                             
+                                    Pat Gray
+                                    HR Recruiter
+                                    Trusted Media
+                                    9 Roundtable Circle
+                                    Los Angeles, CA 90016
+                                                             
+                                    Greetings Mrs. Gray:
+                                                             
+                                    I'm pleased to recommend Jason Breeze for the Social Media Coordinator position at Trusted Media. I was Jason's supervisor at QuipJobs for five years, where he used his digital marketing and communication skills to deliver strong results in his role as Social Media Support Specialist. His creativity, writing and organizational skills would make him an asset at Trusted Media.
+                                                             
+                                    As a Social Media Support Specialist, Jason demonstrated his ability to connect with an audience and analyze data. Over two years, he grew our social media presence on all platforms by 233%. During our new product launch, he used his exceptional creative skills to design an effective social media campaign.
+                                                             
+                                    I highly recommend Jason for this role and believe he can be a strong addition to your team. Please contact me if you have any questions about his past work.
+                                                             
+                                    Sincerely,
+                                                             
+                                    #{name}
+                                    """,
                             """
-                            Dana Coots
-                            Marketing Manager
-                            QuipJobs
-                            45 Cimarron Way
-                            San Diego, CA 92029
-                                                     
-                            March 9, 2023
-                                                     
-                            Pat Gray
-                            HR Recruiter
-                            Trusted Media
-                            9 Roundtable Circle
-                            Los Angeles, CA 90016
-                                                     
-                            Greetings Mrs. Gray:
-                                                     
-                            I'm pleased to recommend Jason Breeze for the Social Media Coordinator position at Trusted Media. I was Jason's supervisor at QuipJobs for five years, where he used his digital marketing and communication skills to deliver strong results in his role as Social Media Support Specialist. His creativity, writing and organizational skills would make him an asset at Trusted Media.
-                                                     
-                            As a Social Media Support Specialist, Jason demonstrated his ability to connect with an audience and analyze data. Over two years, he grew our social media presence on all platforms by 233%. During our new product launch, he used his exceptional creative skills to design an effective social media campaign.
-                                                     
-                            I highly recommend Jason for this role and believe he can be a strong addition to your team. Please contact me if you have any questions about his past work.
-                                                     
-                            Sincerely,
-                                                     
-                            Dana Coots
-                            """)
+                                    Dana Coots
+                                    Marketing Manager
+                                    QuipJobs
+                                    45 Cimarron Way
+                                    San Diego, CA 92029
+                                                             
+                                    March 9, 2023
+                                                             
+                                    Pat Gray
+                                    HR Recruiter
+                                    Trusted Media
+                                    9 Roundtable Circle
+                                    Los Angeles, CA 90016
+                                                             
+                                    Greetings Mrs. Gray:
+                                                             
+                                    I'm pleased to recommend Jason Breeze for the Social Media Coordinator position at Trusted Media. I was Jason's supervisor at QuipJobs for five years, where he used his digital marketing and communication skills to deliver strong results in his role as Social Media Support Specialist. His creativity, writing and organizational skills would make him an asset at Trusted Media.
+                                                             
+                                    As a Social Media Support Specialist, Jason demonstrated his ability to connect with an audience and analyze data. Over two years, he grew our social media presence on all platforms by 233%. During our new product launch, he used his exceptional creative skills to design an effective social media campaign.
+                                                             
+                                    I highly recommend Jason for this role and believe he can be a strong addition to your team. Please contact me if you have any questions about his past work.
+                                                             
+                                    Sincerely,
+                                                             
+                                    Dana Coots
+                                    """)
             );
         }
 
         @ParameterizedTest
         @MethodSource("provideInputForTemplateEngine")
-        void templateShouldBeProcessed(Map<String,String> tags, String text, String expected){
+        void templateShouldBeProcessed(Map<String, String> tags, String text, String expected) {
             //Having
             Template template = new Template(text);
-            Client client = new Client(SAMPLE_MAIL, tags);
+            Client testClient = client.withTags(tags);
             TemplateEngine templateEngine = new TemplateEngine();
             //When
-            String actual = templateEngine.generateMessage(template, client);
+            String actual = templateEngine.generateMessage(template, testClient);
             //Then
             Assertions.assertEquals(expected, actual);
         }
     }
 
     @Nested
-    class ValidationTests{
+    class ValidationTests {
+
         @ParameterizedTest
-        @ValueSource(strings = {"气候宜人", "Alpha - Α α Beta - Β β Gamma - Γ γ Delta - Δ δ Epsilon - Ε ε Zeta - Ζ ζ","привет"})
-        void exceptionShouldBeRaisedForNonLatin1Data(String text){
+        @ValueSource(strings = {"气候宜人", "Alpha - Α α Beta - Β β Gamma - Γ γ Delta - Δ δ Epsilon - Ε ε Zeta - Ζ ζ", "привет"})
+        void exceptionShouldBeRaisedForNonLatin1Data(String text) {
             //Having
             Template template = new Template(text);
-            Client client = new Client(SAMPLE_MAIL, new HashMap<>());
             TemplateEngine templateEngine = new TemplateEngine();
             //Then
             assertThrows(NonLatinTemplateException.class, () -> templateEngine.generateMessage(template, client));
         }
 
         @ParameterizedTest
-        @ValueSource(strings = {"aalle, ekek=ek. Ek ek.", "H","HI I AM PAVEL(Worker)"})
-        void exceptionShouldBeNotRaisedForLatin1Data(String text){
+        @ValueSource(strings = {"aalle, ekek=ek. Ek ek.", "H", "HI I AM PAVEL(Worker)"})
+        void exceptionShouldBeNotRaisedForLatin1Data(String text) {
             //Having
             Template template = new Template(text);
-            Client client = new Client(SAMPLE_MAIL, new HashMap<>());
             TemplateEngine templateEngine = new TemplateEngine();
             //Then
             assertDoesNotThrow(() -> templateEngine.generateMessage(template, client));
@@ -147,10 +151,10 @@ public class TemplateEngineTest {
                             "Hi John! The subject of our letter is #{subject} and we are going to meet tonight"),
                     Arguments.of(Map.of(
                                     "name", "Victor",
-                                    "surname","Vyrostak"),
+                                    "surname", "Vyrostak"),
                             "Subject: #{subject} then letter goes next...."),
                     Arguments.of(Map.of(
-                                    "subject","Application",
+                                    "subject", "Application",
                                     "name", "Victor"),
                             "Subject is #{subject}, Name is #{name}, Surname is #{surname} ")
             );
@@ -159,13 +163,13 @@ public class TemplateEngineTest {
 
         @ParameterizedTest
         @MethodSource("provideLessTagsInputForTemplateEngine")
-        void allTagsShouldBeInserted(Map<String,String> tags, String text){
+        void allTagsShouldBeInserted(Map<String, String> tags, String text) {
             //Having
             Template template = new Template(text);
-            Client client = new Client(SAMPLE_MAIL, tags);
+            Client testClient = client.withTags(tags);
             TemplateEngine templateEngine = new TemplateEngine();
             //Then
-            assertThrows(TagsRemainTemplateException.class, () -> templateEngine.generateMessage(template, client));
+            assertThrows(TagsRemainTemplateException.class, () -> templateEngine.generateMessage(template, testClient));
 
         }
 
@@ -175,7 +179,7 @@ public class TemplateEngineTest {
                     Arguments.of(Map.of(
                                     "name", "Victor",
                                     "surname", "Vyrostak",
-                                    "sometag","sometagvalue"),
+                                    "sometag", "sometagvalue"),
                             "My name is #{name} and I'm Java specialist."),
                     Arguments.of(Map.of(
                                     "subject", "Java",
@@ -187,13 +191,13 @@ public class TemplateEngineTest {
 
         @ParameterizedTest
         @MethodSource("provideMoreTagsInputForTemplateEngine")
-        void extraValuesShouldBeIgnored(Map<String,String> tags, String text){
+        void extraValuesShouldBeIgnored(Map<String, String> tags, String text) {
             //Having
             Template template = new Template(text);
-            Client client = new Client(SAMPLE_MAIL, tags);
+            Client testClient = client.withTags(tags);
             TemplateEngine templateEngine = new TemplateEngine();
             //Then
-            assertDoesNotThrow(() -> templateEngine.generateMessage(template, client));
+            assertDoesNotThrow(() -> templateEngine.generateMessage(template, testClient));
         }
     }
 

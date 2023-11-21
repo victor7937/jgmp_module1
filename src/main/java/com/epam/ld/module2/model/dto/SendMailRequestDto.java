@@ -1,4 +1,4 @@
-package com.epam.ld.module2.model;
+package com.epam.ld.module2.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,10 +9,21 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaggedTemplate {
+public class SendMailRequestDto {
+
+    private String from;
+
+    private String password;
+
+    private String to;
+
+    private String subject;
 
     private String text;
 
     private Map<String, String> tags;
+
+
+
 
 }

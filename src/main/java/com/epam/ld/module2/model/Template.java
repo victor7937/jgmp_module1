@@ -1,22 +1,15 @@
 package com.epam.ld.module2.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * The type Template.
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Template {
     private String text;
-
-    public Template() {}
-
-    public Template(String text) {
-        this.text = text;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
 }

@@ -5,6 +5,7 @@ import com.epam.ld.module2.model.TaggedTemplate;
 import com.epam.ld.module2.model.Template;
 import com.epam.ld.module2.service.template.exception.NonLatinTemplateException;
 import com.epam.ld.module2.service.template.exception.TagsRemainTemplateException;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -16,8 +17,12 @@ import static com.epam.ld.module2.service.template.Constant.TAG_REGEX;
 /**
  * The type Template engine.
  */
+@Component
 public class TemplateEngine {
 
+
+    public TemplateEngine() {
+    }
 
     /**
      * Generate message string.
@@ -41,7 +46,6 @@ public class TemplateEngine {
     private String insertValues(TaggedTemplate taggedTemplate){
         Map<String, String> tags = taggedTemplate.getTags();
         String text = taggedTemplate.getText();
-
         StringBuffer sb = new StringBuffer();
         Pattern pattern = Pattern.compile(TAG_REGEX);
         Matcher matcher = pattern.matcher(text);
