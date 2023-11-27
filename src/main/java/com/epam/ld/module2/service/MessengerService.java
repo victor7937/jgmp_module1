@@ -2,6 +2,7 @@ package com.epam.ld.module2.service;
 
 
 import com.epam.ld.module2.model.Client;
+import com.epam.ld.module2.model.Message;
 import com.epam.ld.module2.model.Template;
 import com.epam.ld.module2.service.mail.MailServer;
 import com.epam.ld.module2.service.template.TemplateEngine;
@@ -22,8 +23,6 @@ public class MessengerService {
     private MailServer mailServer;
     private TemplateEngine templateEngine;
 
-    private Map<String, String> emails = new ConcurrentHashMap<>();
-
     /**
      * Instantiates a new Messenger.
      *
@@ -37,9 +36,6 @@ public class MessengerService {
         this.templateEngine = templateEngine;
     }
 
-    public String getContent(String messageId){
-       return emails.get(messageId);
-    }
 
     /**
      * Send message.
@@ -47,11 +43,18 @@ public class MessengerService {
      * @param client   the client
      * @param template the template
      */
-    public String sendMessage(Client client, Template template) {
+    public Message sendMessage(Client client, Template template) {
         String messageContent = templateEngine.generateMessage(template, client);
-        String messageId = mailServer.send(client.getTargetEmail(), client.getEmail(), client.getPassword(), messageContent, client.getSubject());
+        String messageId = mailServer.send(
+                client.getTargetEmail(),
+                client.getEmail(),
+                client.getPassword(),
+                messageContent,
+                client.getSubject());
         log.info("New message " + messageId + " was sent");
-        emails.put(messageId, messageContent);
-        return messageId;
+        return Message.builder()
+                .id(messageId)
+                .content(messageContent)
+                .build();
     }
 }

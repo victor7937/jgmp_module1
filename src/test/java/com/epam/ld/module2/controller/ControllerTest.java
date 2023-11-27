@@ -5,6 +5,7 @@ import com.epam.ld.module2.service.MessengerService;
 import com.epam.ld.module2.service.mail.MailServer;
 import com.epam.ld.module2.service.template.TemplateEngine;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,9 +56,9 @@ public class ControllerTest {
     void integrationTest() throws Exception {
         String requestJson = """
                 {
-                    "from":"mail.@mail.com",
+                    "from":"mail@mail.com",
                     "password":"password",
-                    "to":"mail.@mail.com",
+                    "to":"mail@mail.com",
                     "subject":"Test Subject",
                     "text":"Hi it's #{name} #{surname}",
                     "tags":
@@ -73,8 +74,8 @@ public class ControllerTest {
                 {
                     "messageId": "123",
                     "messageText": "Hi it's Alexey Sanders",
-                    "from": "mail.@mail.com",
-                    "to": "mail.@mail.com"
+                    "from": "mail@mail.com",
+                    "to": "mail@mail.com"
                 }
                 """;
 
@@ -94,9 +95,9 @@ public class ControllerTest {
     void badRequestTest() throws Exception {
         String requestJson = """
                 {
-                    "from":"mail.@mail.com",
+                    "from":"mail@mail.com",
                     "password":"password",
-                    "to":"mail.@mail.com",
+                    "to":"mail@mail.com",
                     "subject":"Test Subject",
                     "text":"Hi it's #{name} #{surname} #{familyname} ",
                     "tags":
@@ -112,7 +113,7 @@ public class ControllerTest {
                 {
                     "statusCode": 400,
                     "status": "BAD_REQUEST",
-                    "message": "There are a some tags that are still unpopulated!"
+                    "message": "There are some tags that are still unpopulated!"
                 }
                 """;
 
@@ -131,9 +132,9 @@ public class ControllerTest {
     void nonLatin1Test() throws Exception {
         String requestJson = """
                 {
-                    "from":"mail.@mail.com",
+                    "from":"mail@mail.com",
                     "password":"password",
-                    "to":"mail.@mail.com",
+                    "to":"mail@mail.com",
                     "subject":"Test Subject",
                     "text":"Hi it's #{name} #{surname} привет",
                     "tags":

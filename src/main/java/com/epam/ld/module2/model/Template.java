@@ -3,13 +3,12 @@ package com.epam.ld.module2.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Value;
 
 /**
  * The type Template.
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Value
 public class Template {
-    private String text;
+    String text;
 }

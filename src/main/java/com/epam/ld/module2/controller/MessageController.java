@@ -1,6 +1,7 @@
 package com.epam.ld.module2.controller;
 
 import com.epam.ld.module2.model.Client;
+import com.epam.ld.module2.model.Message;
 import com.epam.ld.module2.model.Template;
 import com.epam.ld.module2.model.dto.SendMailRequestDto;
 import com.epam.ld.module2.model.dto.SendMailResponseDto;
@@ -26,9 +27,8 @@ public class MessageController {
     public SendMailResponseDto sendMail(@RequestBody SendMailRequestDto requestDto){
         Client client = mapToClient(requestDto);
         Template template = new Template(requestDto.getText());
-        String messageId = messengerService.sendMessage(client, template);
-        String messageContent = messengerService.getContent(messageId);
-        return new SendMailResponseDto(messageId, messageContent, client.getEmail(), client.getTargetEmail());
+        Message message = messengerService.sendMessage(client, template);
+        return new SendMailResponseDto(message.getId(), message.getContent(), client.getEmail(), client.getTargetEmail());
     }
 
     private Client mapToClient(SendMailRequestDto requestDto){
